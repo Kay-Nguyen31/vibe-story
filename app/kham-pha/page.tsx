@@ -225,7 +225,7 @@ export default async function HomePage() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-[#f5f5f7]">Truện Nhiều người đọc</h2>
               <span className="text-sm text-[#9ca3af] flex items-center gap-1">
-                Những truyện sắp được phát hành
+                Những truyện nhiều đọc giả quan tâm
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
