@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { Search, X, ArrowLeft } from "lucide-react"
 import { Header } from "@/components/header"
@@ -11,7 +11,7 @@ import { StoryListItem, StoryCard } from "@/components/story-card"
 import { fetchSearch, getComicThumbUrl, getComicRating, type ComicItem } from "@/lib/otruyen-api"
 import { useSearchParams } from "next/navigation"
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') || ''
   const [query, setQuery] = useState(keyword)
@@ -111,5 +111,17 @@ export default function SearchPage() {
         <Footer />
       </main>
     </div>
+  )
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0d0a1a] flex items-center justify-center">
+        <div className="text-[#9ca3af]">Đang tải...</div>
+      </div>
+    }>
+      <SearchContent />
+    </Suspense>
   )
 }

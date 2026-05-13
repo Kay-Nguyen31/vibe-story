@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { Plus, Edit, Trash2, ArrowLeft, FileText, ChevronLeft, ChevronRight } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 
@@ -21,7 +21,7 @@ interface Chapter {
   created_at: string
 }
 
-export default function AdminChuongPage() {
+function AdminChuongContent() {
   const searchParams = useSearchParams()
   const storyUuid = searchParams.get('story')
   const [stories, setStories] = useState<Story[]>([])
@@ -288,5 +288,17 @@ export default function AdminChuongPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function AdminChuongPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0d0a1a] flex items-center justify-center">
+        <div className="text-[#9ca3af]">Đang tải...</div>
+      </div>
+    }>
+      <AdminChuongContent />
+    </Suspense>
   )
 }
