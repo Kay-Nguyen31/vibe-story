@@ -49,7 +49,8 @@ export default async function HomePage() {
   const ranking = topItems.slice(0, 10)
   const recent = newItems.slice(0, 8)
   const hot = released.slice(0, 8)
-  const upcoming = trendingItems.filter(c => !c.chaptersLatest?.length).slice(0, 8)
+  const upcomingRaw = trendingItems.filter(c => !c.chaptersLatest?.length)
+  const upcoming = upcomingRaw.length > 0 ? upcomingRaw.slice(0, 8) : trendingItems.slice(0, 8)
 
   return (
     <div className="min-h-screen bg-[#0d0a1a] relative overflow-hidden">
@@ -222,7 +223,7 @@ export default async function HomePage() {
           {/* Sắp ra mắt */}
           <section className="mb-10">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-[#f5f5f7]">Sắp ra mắt</h2>
+              <h2 className="text-xl font-bold text-[#f5f5f7]">Truện Nhiều người đọc</h2>
               <span className="text-sm text-[#9ca3af] flex items-center gap-1">
                 Những truyện sắp được phát hành
               </span>

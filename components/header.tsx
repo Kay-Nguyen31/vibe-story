@@ -2,13 +2,22 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
 import { Search } from "lucide-react"
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
+  const pathname = usePathname()
+
+  const navLinks = [
+    { href: "/", label: "Trang chủ" },
+    { href: "/kham-pha", label: "Khám phá" },
+    { href: "/the-loai", label: "Thể loại" },
+    { href: "/moi-cap-nhat", label: "Mới cập nhật" },
+    { href: "/bang-xep-hang", label: "Bảng xếp hạng" },
+  ]
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,11 +48,20 @@ export function Header() {
 
         {/* Navigation */}
         <nav className="hidden lg:flex items-center gap-8">
-          <Link href="/" className="text-md font-medium text-[#f5f5f7] hover:text-[#a855f7] transition-colors">Trang chủ</Link>
-          <Link href="/kham-pha" className="text-md text-[#9ca3af] hover:text-[#f5f5f7] transition-colors">Khám phá</Link>
-          <Link href="/the-loai" className="text-md text-[#9ca3af] hover:text-[#f5f5f7] transition-colors">Thể loại</Link>
-          <Link href="/moi-cap-nhat" className="text-md text-[#9ca3af] hover:text-[#f5f5f7] transition-colors">Mới cập nhật</Link>
-          <Link href="/bang-xep-hang" className="text-md text-[#9ca3af] hover:text-[#f5f5f7] transition-colors">Bảng xếp hạng</Link>
+          {navLinks.map(link => {
+            const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-md font-medium transition-colors ${
+                  isActive ? "text-[#a855f7]" : "text-[#9ca3af] hover:text-[#f5f5f7]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Search & Actions */}

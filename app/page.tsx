@@ -16,7 +16,8 @@ export default async function Home() {
   ])
 
   const comics = homeComics.filter(c => c.chaptersLatest?.length > 0)
-  const upcoming = newComics.filter(c => !c.chaptersLatest?.length).slice(0, 8)
+  const upcomingRaw = newComics.filter(c => !c.chaptersLatest?.length)
+  const upcoming = upcomingRaw.length > 0 ? upcomingRaw.slice(0, 8) : newComics.slice(0, 8)
 
   return (
     <div className="min-h-screen bg-[#0d0a1a] relative overflow-hidden">
