@@ -66,7 +66,8 @@ function getFullImageUrl(thumbUrl: string) {
   return `${CDN_IMAGE}/${thumbUrl}`
 }
 
-export function getComicRating(id: string): number {
+export function getComicRating(id?: string): number {
+  if (!id) return 4.5
   let hash = 5381
   for (let i = 0; i < id.length; i++) {
     hash = ((hash << 5) + hash) + id.charCodeAt(i)

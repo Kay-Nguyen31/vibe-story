@@ -90,7 +90,7 @@ function SearchContent() {
               <div className="space-y-1">
                 {results.map((item, idx) => (
                   <StoryListItem
-                    key={item._id}
+                    key={item._id || item.slug || idx}
                     id={item.slug}
                     title={item.name}
                     cover={getComicThumbUrl(item.thumb_url)}
@@ -117,8 +117,18 @@ function SearchContent() {
 export default function SearchPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#0d0a1a] flex items-center justify-center">
-        <div className="text-[#9ca3af]">Đang tải...</div>
+      <div className="min-h-screen bg-[#0d0a1a] relative overflow-hidden">
+        <ShootingStars />
+        <Header />
+        <Sidebar />
+        <main className="pt-32 lg:pl-56 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
+            <div className="animate-pulse space-y-4">
+              <div className="h-12 bg-[#1a1428] rounded-2xl" />
+              <div className="h-6 bg-[#1a1428] rounded w-1/3" />
+            </div>
+          </div>
+        </main>
       </div>
     }>
       <SearchContent />
