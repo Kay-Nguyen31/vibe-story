@@ -36,16 +36,20 @@ const iconMap: Record<string, React.ElementType> = {
 }
 
 export default async function HomePage() {
-  const [{ items: homeItems }, { items: newItems }, categories] = await Promise.all([
+  const [{ items: homeItems }, { items: newItems }, { items: topItems }, { items: trendingItems }, categories] = await Promise.all([
     fetchHome(),
     fetchList('truyen-moi', 1),
+    fetchList('dang-phat-hanh', 1),
+    fetchList('truyen-moi', 2),
     fetchCategories(),
   ])
 
-  const recommended = homeItems.slice(0, 4)
-  const ranking = homeItems.slice(0, 10)
+  const released = homeItems.filter(c => c.chaptersLatest?.length > 0)
+  const recommended = released.slice(0, 4)
+  const ranking = topItems.slice(0, 10)
   const recent = newItems.slice(0, 8)
-  const hot = homeItems.slice(0, 8)
+  const hot = released.slice(0, 8)
+  const upcoming = trendingItems.filter(c => !c.chaptersLatest?.length).slice(0, 8)
 
   return (
     <div className="min-h-screen bg-[#0d0a1a] relative overflow-hidden">
@@ -210,6 +214,28 @@ export default async function HomePage() {
                   genre={item.category?.[0]?.name || 'Khác'}
                   rating={getComicRating(item._id)}
                   isHot={true}
+                />
+              ))}
+            </div>
+          </section>
+
+          {/* Sắp ra mắt */}
+          <section className="mb-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-[#f5f5f7]">Sắp ra mắt</h2>
+              <span className="text-sm text-[#9ca3af] flex items-center gap-1">
+                Những truyện sắp được phát hành
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+              {upcoming.map((item) => (
+                <StoryCard
+                  key={item._id}
+                  id={item.slug}
+                  title={item.name}
+                  cover={getComicThumbUrl(item.thumb_url)}
+                  genre={item.category?.[0]?.name || 'Khác'}
+                  rating={getComicRating(item._id)}
                 />
               ))}
             </div>

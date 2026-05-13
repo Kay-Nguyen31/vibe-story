@@ -1,18 +1,22 @@
 import Link from "next/link"
-import { Star, Heart, TrendingUp, ChevronRight } from "lucide-react"
+import { Star, Heart, TrendingUp, ChevronRight, Clock, Sparkles } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ShootingStars } from "@/components/shooting-stars"
 import { AnimatedSection } from "@/components/animated-section"
 import { ContinueReading } from "@/components/continue-reading"
 import { StoryListItem, StoryCard, FeaturedStoryCard } from "@/components/story-card"
-import { fetchHome, fetchCategories, getComicThumbUrl, getComicRating } from "@/lib/otruyen-api"
+import { fetchHome, fetchList, fetchCategories, getComicThumbUrl, getComicRating } from "@/lib/otruyen-api"
 
 export default async function Home() {
-  const [{ items: comics }, categories] = await Promise.all([
+  const [{ items: homeComics }, { items: newComics }, categories] = await Promise.all([
     fetchHome(),
+    fetchList('truyen-moi', 1),
     fetchCategories(),
   ])
+
+  const comics = homeComics.filter(c => c.chaptersLatest?.length > 0)
+  const upcoming = newComics.filter(c => !c.chaptersLatest?.length).slice(0, 8)
 
   return (
     <div className="min-h-screen bg-[#0d0a1a] relative overflow-hidden">
@@ -134,6 +138,34 @@ export default async function Home() {
             </div>
           </section>
         </AnimatedSection>
+
+        {/* Upcoming Stories */}
+        {upcoming.length > 0 && (
+          <AnimatedSection delay={250} direction="fade">
+            <section className="max-w-[1400px] mx-auto px-4 pb-12 pt-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-[#f5f5f7] flex items-center gap-2">
+                  <Clock className="w-6 h-6 text-[#ec4899]" /> Sắp ra mắt
+                </h2>
+                <Link href="/kham-pha" className="text-sm text-[#a855f7] hover:underline flex items-center gap-1">
+                  Xem tất cả <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-4">
+                {upcoming.slice(0, 8).map((item) => (
+                  <StoryCard
+                    key={item._id}
+                    id={item.slug}
+                    title={item.name}
+                    cover={getComicThumbUrl(item.thumb_url)}
+                    genre={item.category?.[0]?.name || 'Khác'}
+                    rating={getComicRating(item._id)}
+                  />
+                ))}
+              </div>
+            </section>
+          </AnimatedSection>
+        )}
 
         {/* Stats Section */}
         <AnimatedSection delay={300} direction="up">
