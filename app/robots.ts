@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/api/'],
     },
-    sitemap: 'https://vibetruyen.com/sitemap.xml',
+    sitemap: 'https://vibetruyen.click/sitemap.xml',
   }
 }
